@@ -1,13 +1,17 @@
 from django.shortcuts import render_to_response
 from survey.models import Survey
 from django.http import HttpResponse
+from django.shortcuts import render_to_response, get_object_or_404
+
 
 def index(request):
     latest_survey_list = Survey.objects.all().order_by('-pub_date')[:5]
     return render_to_response('survey/index.html', {'latest_survey_list': latest_survey_list})
 
 def detail(request, survey_id):
-    return HttpResponse("You're looking at survey %s." % survey_id)
+    s = get_object_or_404(Survey, pk=survey_id)
+    return render_to_response('survey/detail.html', {'survey': s})
+
 
 def results(request, survey_id):
     return HttpResponse("You're looking at the results of survey %s." % survey_id)
